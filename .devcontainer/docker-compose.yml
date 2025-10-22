@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/python:3.12
+    command: sleep infinity
+    depends_on: [db]
+    environment:
+      DJANGO_DEBUG: "1"
+      POSTGRES_DB: quoteapi
+      POSTGRES_USER: quoteapi
+      POSTGRES_PASSWORD: quoteapi
+      POSTGRES_HOST: db
+      POSTGRES_PORT: "5432"
+    volumes:
+      - ..:/workspaces/${LOCAL_WORKSPACE_FOLDER_BASENAME}
+    ports:
+      - "8000:8000"
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: quoteapi
+      POSTGRES_USER: quoteapi
+      POSTGRES_PASSWORD: quoteapi
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
